@@ -1,0 +1,5 @@
+*.npy
+early-env
+data
+*.png
+*__pycache__*
