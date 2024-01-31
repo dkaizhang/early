@@ -138,5 +138,21 @@ class ModelWrapper():
 
         return ent, ent_early
 
+    def prediction_step(self, data):
+        self.model.to(self.device)
+        self.model.eval()
+
+        with torch.no_grad():
+            x, y = data
+            x = x.to(self.device)
+            y = y.to(self.device)
+
+            y_hat, y_hat_early = self.model(x)
+            
+            _, out = F.softmax(y_hat, dim=-1).topk(1, dim=-1)
+            _, out_early = F.softmax(y_hat_early, dim=-1).topk(1, dim=-1)
+
+        return out, out_early
+
     def get_labels(self):
         return self.labels

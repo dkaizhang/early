@@ -141,3 +141,17 @@ class Trainer():
             ents_early.append(ent_early.detach().cpu())
 
         return torch.cat(ents, dim=0), torch.cat(ents_early, dim=0)
+
+    def predict(self, model, data):
+
+        dataloader = DataLoader(data, batch_size=self.batch_size, num_workers=self.num_workers, shuffle=False)
+
+        outs = []        
+        outs_early = []
+        for batch_idx, data in enumerate(tqdm(dataloader)):
+
+            out, out_early = model.prediction_step(data)
+            outs.append(out.detach().cpu())
+            outs_early.append(out_early.detach().cpu())
+
+        return torch.cat(outs, dim=0), torch.cat(outs_early, dim=0)
